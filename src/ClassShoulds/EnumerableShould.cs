@@ -1,21 +1,34 @@
+using System.Linq.Expressions;
 using System.Text;
 using Shouldly;
+using ShouldlyFluentassertionsBridge.Constraints;
 
 namespace ShouldlyFluentassertionsBridge.ClassShoulds;
 
 public class EnumerableShould<T>(IEnumerable<T?>? input)
 {
-    public void Be(T? expected, string? because = null) => expected.ShouldBe(expected, because);
+    public AndConstraint<EnumerableShould<T>> Be(T? expected, 
+                                                 string? because = null)
+    {
+        expected.ShouldBe(expected,
+                          because);
+        
+        return new AndConstraint<EnumerableShould<T>>(this);
+    }
 
-    public void HaveCount(int actual, string? because = null)
+    public AndConstraint<EnumerableShould<T>> HaveCount(int actual, 
+                                                        string? because = null)
     {
         if (input == null)
             throw new ShouldAssertException(new ExpectedShouldlyMessage(input, because).ToString());
 
         input.Count().ShouldBe(actual, because);
+        return new AndConstraint<EnumerableShould<T>>(this);
     }
 
-    public void AllSatisfy(Action<T?> expected, string because = "", params object[] becauseArgs)
+    public AndConstraint<EnumerableShould<T>> AllSatisfy(Action<T?> expected, 
+                                                         string because = "", 
+                                                         params object[] becauseArgs)
     {
         if (input == null)
         {
@@ -36,7 +49,7 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
         }
 
         if (errors.Count == 0)
-            return;
+            return new AndConstraint<EnumerableShould<T>>(this);
 
         var errorBuilder = new StringBuilder();
         errorBuilder.AppendLine($"##### Errors: {errors.Count} #####");
@@ -52,7 +65,8 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
         );
     }
 
-    public void HaveCountGreaterOrEqualTo(int expected, string because)
+    public AndConstraint<EnumerableShould<T>> HaveCountGreaterOrEqualTo(int expected, 
+                                                                        string? because = null)
     {
         if (input == null)
         {
@@ -60,5 +74,38 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
         }
 
         input.Count().ShouldBeGreaterThanOrEqualTo(expected, because);
+        return new AndConstraint<EnumerableShould<T>>(this);
+    }
+
+    public AndConstraint<EnumerableShould<T>> ContainEquivalentOf(T expected,
+                                                                  string? because = null)
+    {
+        if (input == null)
+        {
+            throw new ShouldAssertException(new ExpectedShouldlyMessage(input, because).ToString());
+        }
+        
+        input.ShouldContain(expected, because);
+        return new AndConstraint<EnumerableShould<T>>(this);
+    }
+
+    public AndConstraint<EnumerableShould<T>> BeEmpty(string? because = null)
+    {
+        if (input == null)
+            throw new ShouldAssertException(new ExpectedShouldlyMessage(input, because).ToString());
+
+        input.ShouldBeEmpty(because);
+
+        return new AndConstraint<EnumerableShould<T>>(this);
+    }
+
+    public AndConstraint<EnumerableShould<T>> ContainSingle(Expression<Func<T, bool>> predicate,
+                                                            string? because = null)
+    {
+        if (input == null)
+            throw new ShouldAssertException(new ExpectedShouldlyMessage(input, because).ToString());
+        
+        input!.ShouldContain(predicate, 1, because);
+        return new AndConstraint<EnumerableShould<T>>(this);
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using ShouldlyFluentassertionsBridge.ClassShoulds;
 using ShouldlyFluentassertionsBridge.StructShoulds;
 
@@ -8,7 +9,10 @@ public static class FluentAssertionBridge
     public static ClassShould<T> Should<T>(this T? input) where T : class => new(input);
     public static StringShould Should(this string? input) => new(input);
     public static EnumerableShould<T?> Should<T>(this IEnumerable<T>? input) where T : class => new(input);
+    public static EnumerableShould<T?> Should<T>(this List<T>? input) where T : class => new(input);
     public static EnumerableShould<T?> Should<T>(this ICollection<T>? input) where T : class => new(input);
+    public static EnumerableShould<T?> Should<T>(this Collection<T>? input) where T : class => new(input);
+    public static EnumerableShould<T?> Should<T>(this IReadOnlyCollection<T>? input) where T : class => new(input);
     public static EnumerableShould<T?> Should<T>(this T?[]? input) where T : class => new(input);
 }
 
