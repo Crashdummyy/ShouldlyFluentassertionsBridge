@@ -6,7 +6,6 @@ on:
     branches:
       - "master"
 
-
 jobs:
   ci:
     runs-on: host
@@ -18,11 +17,15 @@ jobs:
         run: |
           dotnet build "./src/ShouldlyFluentassertionsBridge.csproj" -c Release
 
+      - name: list sources
+        run: |
+          cp "/home/crashdummy/.nuget/NuGet/NuGet.Config" .
+          dotnet nuget list source
+
       - name: PacknPush
         if: ${{ github.event_name == 'push' }}
         run: |
           dotnet pack "./src/ShouldlyFluentassertionsBridge.csproj" -c Release -p:PackageVersion="${{ github.ref_name }}" -p:PackageID="Codepotatoes.ShouldlyFluentassertionsBridge" -o .
-          cp "/home/crashdummy/.nuget/NuGet/NuGet.Config" .
-          dotnet nuget push *.nupkg -s codepotatoes -k "${{ secrets.NUGET_API_KEY }}"
-          dotnet nuget push *.nupkg -s nuget.org -k "${{ secrets.NUGETORG_API_KEY }}"
+          dotnet nuget push *.nupkg -s "https://git.codepotatoes.de/api/packages/Packages/nuget/index.json" -k "${{ secrets.NUGET_API_KEY }}"
+          dotnet nuget push *.nupkg -s "https://api.nuget.org/v3/index.json" -k "${{ secrets.NUGETORG_API_KEY }}"
 
