@@ -9,7 +9,7 @@ public static class Guard
     {
         if (input != null)
             return;
-        
-        throw new ShouldAssertException(new ExpectedShouldlyMessage(input, because).ToString());
+
+        throw new ShouldAssertException($"Expected input not to be <null> {Formatter.Because(because)}");
     }
 }

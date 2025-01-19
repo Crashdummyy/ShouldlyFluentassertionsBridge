@@ -7,17 +7,14 @@ namespace ShouldlyFluentassertionsBridge.ClassShoulds;
 
 public class EnumerableShould<T>(IEnumerable<T?>? input)
 {
-    public AndConstraint<EnumerableShould<T>> Be(IEnumerable<T?>? expected,
-                                                 string? because = null)
+    public AndConstraint<EnumerableShould<T>> Be(IEnumerable<T?>? expected, string? because = null)
     {
         if (input == null && expected == null)
             return new AndConstraint<EnumerableShould<T>>(this);
 
-        Guard.AssertNotNull(input,
-                            because);
+        Guard.AssertNotNull(input, because);
 
-        input.ShouldBe(expected,
-                       because);
+        input.ShouldBe(expected, because);
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
@@ -38,8 +35,7 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
 
     public AndConstraint<EnumerableShould<T>> BeEmpty(string? because = null)
     {
-        Guard.AssertNotNull(input,
-                            because);
+        Guard.AssertNotNull(input, because);
         input.ShouldBeEmpty(because);
 
         return new AndConstraint<EnumerableShould<T>>(this);
@@ -47,29 +43,31 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
 
     public AndConstraint<EnumerableShould<T>> NotBeEmpty(string? because = null)
     {
-        Guard.AssertNotNull(input,
-                            because);
+        Guard.AssertNotNull(input, because);
         input.ShouldNotBeEmpty(because);
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
-    public AndConstraint<EnumerableShould<T>> HaveCount(int actual,
-                                                        string? because = null)
+    public AndConstraint<EnumerableShould<T>> HaveCount(int expected, string? because = null)
     {
-        Guard.AssertNotNull(input,
-                            because);
-        input!.Count().ShouldBe(actual,
-                                because);
+        Guard.AssertNotNull(input, because);
+
+        if (input!.Count() != expected)
+            throw new ShouldAssertException(
+                $"Expected {input!.Format()} to contain {expected} entries {Formatter.Because(because)} but only found {input!.Count()}"
+            );
+
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
-    public AndConstraint<EnumerableShould<T>> AllSatisfy(Action<T?> expected,
-                                                         string because = "",
-                                                         params object[] becauseArgs)
+    public AndConstraint<EnumerableShould<T>> AllSatisfy(
+        Action<T?> expected,
+        string because = "",
+        params object[] becauseArgs
+    )
     {
-        Guard.AssertNotNull(input,
-                            because);
+        Guard.AssertNotNull(input, because);
 
         var errors = new List<string>(input!.Count());
         foreach (var item in input!)
@@ -96,38 +94,38 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
             new ExpectedActualShouldlyMessage(
                 errorBuilder.ToString(),
                 input,
-                string.Format(because,
-                              becauseArgs)
+                string.Format(because, becauseArgs)
             ).ToString()
         );
     }
 
-    public AndConstraint<EnumerableShould<T>> HaveCountGreaterOrEqualTo(int expected,
-                                                                        string? because = null)
+    public AndConstraint<EnumerableShould<T>> HaveCountGreaterOrEqualTo(
+        int expected,
+        string? because = null
+    )
     {
-        Guard.AssertNotNull(input,
-                            because);
-
-        input!.Count().ShouldBeGreaterThanOrEqualTo(expected,
-                                                    because);
+        Guard.AssertNotNull(input, because);
+        if (input!.Count() < expected)
+            throw new ShouldAssertException(
+                $"Expected {input!.Format()} to contain at least {expected} {Formatter.Because(because)} entries but only found {input!.Count()}"
+            );
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
-    public AndConstraint<EnumerableShould<T>> Contain(T expected,
-                                                      string? because = null)
+    public AndConstraint<EnumerableShould<T>> Contain(T expected, string? because = null)
     {
         Guard.AssertNotNull(input);
-        input!.ShouldContain(expected,
-                             customMessage: because);
+        input!.ShouldContain(expected, customMessage: because);
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
-    public AndConstraint<EnumerableShould<T>> Contain(IEnumerable<T> expected,
-                                                      string? because = null)
+    public AndConstraint<EnumerableShould<T>> Contain(
+        IEnumerable<T> expected,
+        string? because = null
+    )
     {
-        Guard.AssertNotNull(input,
-                            because);
-        
+        Guard.AssertNotNull(input, because);
+
         var expectedList = expected as IList<T> ?? expected!.ToList()!;
         var inputList = input as IList<T> ?? input?.ToList()!;
         var missingEntries = new List<T>();
@@ -144,68 +142,69 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
             }
         }
 
-        throw new ShouldAssertException($"Expected {inputList.Format()} to contain {missingEntries.Format()} but they are missing");
+        throw new ShouldAssertException(
+            $"Expected {inputList.Format()} to contain {missingEntries.Format()} {Formatter.Because(because)} but they are missing"
+        );
     }
 
-    public AndConstraint<EnumerableShould<T>> Contain(params T[] expected) => Contain(expected,
-                                                                                      null);
-    
-    public AndConstraint<EnumerableShould<T>> NotContain(T expected,
-                                                         string? because = null)
+    public AndConstraint<EnumerableShould<T>> Contain(params T[] expected) =>
+        Contain(expected, null);
+
+    public AndConstraint<EnumerableShould<T>> NotContain(T expected, string? because = null)
     {
         Guard.AssertNotNull(input);
-        input!.ShouldNotContain(expected,
-                                customMessage: because);
+        input!.ShouldNotContain(expected, customMessage: because);
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
-    public AndConstraint<EnumerableShould<T>> Contain(Expression<Func<T, bool>> elementPredicate,
-                                                      string? because = null,
-                                                      int? numberOfTimes = null)
+    public AndConstraint<EnumerableShould<T>> Contain(
+        Expression<Func<T, bool>> elementPredicate,
+        string? because = null,
+        int? numberOfTimes = null
+    )
     {
-        Guard.AssertNotNull(input,
-                            because);
+        Guard.AssertNotNull(input, because);
 
         if (numberOfTimes == null)
         {
-            input!.ShouldContain(elementPredicate, 
-                                 customMessage: because);
+            input!.ShouldContain(elementPredicate, customMessage: because);
         }
         else
         {
-            input!.ShouldContain(elementPredicate,
-                                 expectedCount: numberOfTimes.Value,
-                                 customMessage: because);    
+            input!.ShouldContain(
+                elementPredicate,
+                expectedCount: numberOfTimes.Value,
+                customMessage: because
+            );
         }
-        
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
-    public AndConstraint<EnumerableShould<T>> NotContain(Expression<Func<T, bool>> elementPredicate,
-                                                         string? because = null)
+    public AndConstraint<EnumerableShould<T>> NotContain(
+        Expression<Func<T, bool>> elementPredicate,
+        string? because = null
+    )
     {
-        Guard.AssertNotNull(input,
-                            because);
+        Guard.AssertNotNull(input, because);
 
-        input!.ShouldNotContain(elementPredicate,
-                                because);
+        input!.ShouldNotContain(elementPredicate, because);
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
-    public AndConstraint<EnumerableShould<T>> ContainEquivalentOf(T expected,
-                                                                  string? because = null)
+    public AndConstraint<EnumerableShould<T>> ContainEquivalentOf(
+        T expected,
+        string? because = null
+    )
     {
-        Guard.AssertNotNull(input,
-                            because);
+        Guard.AssertNotNull(input, because);
 
         foreach (var element in input!)
         {
             try
             {
-                element.ShouldBeEquivalentTo(expected,
-                                             customMessage: because);
+                element.ShouldBeEquivalentTo(expected, customMessage: because);
 
                 return new AndConstraint<EnumerableShould<T>>(this);
             }
@@ -215,26 +214,28 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
             }
         }
 
-        throw new ShouldAssertException($"Expected {input.Format()} to contain {expected.Format()} but it was nowhere to be found");
+        throw new ShouldAssertException(
+            $"Expected {input.Format()} to contain {expected.Format()} but it was nowhere to be found"
+        );
     }
 
-    public AndConstraint<EnumerableShould<T>> ContainSingle(Expression<Func<T, bool>> predicate,
-                                                            string? because = null)
+    public AndConstraint<EnumerableShould<T>> ContainSingle(
+        Expression<Func<T, bool>> predicate,
+        string? because = null
+    )
     {
-        return ContainsNumberOfTimes(predicate,
-                                     expectedCount: 1,
-                                     because);
+        return ContainsNumberOfTimes(predicate, expectedCount: 1, because);
     }
 
     public AndConstraint<EnumerableShould<T>> ContainInOrder(params T?[] expected) =>
-        ContainInOrder(expected,
-                       string.Empty);
+        ContainInOrder(expected, string.Empty);
 
-    public AndConstraint<EnumerableShould<T>> ContainInOrder(IEnumerable<T?> expected,
-                                                             string? because)
+    public AndConstraint<EnumerableShould<T>> ContainInOrder(
+        IEnumerable<T?> expected,
+        string? because
+    )
     {
-        Guard.AssertNotNull(input,
-                            because);
+        Guard.AssertNotNull(input, because);
 
         var expectedList = expected as IList<T> ?? expected!.ToList()!;
         var actualList = input as IList<T> ?? input!.ToList()!;
@@ -245,50 +246,58 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
             var expectedEntry = expectedList[index];
             try
             {
-                actual.ShouldBeEquivalentTo(expectedEntry,
-                                            because);
+                actual.ShouldBeEquivalentTo(expectedEntry, because);
             }
             catch (ShouldAssertException e)
             {
-                throw new ShouldAssertException($"Expected {expectedEntry.Format()} at ({index}) but found {actual.Format()}",
-                                                e);
+                throw new ShouldAssertException(
+                    $"Expected {expectedEntry.Format()} at ({index}) but found {actual.Format()}",
+                    e
+                );
             }
         }
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
-    public AndConstraint<EnumerableShould<T>> HaveCountLessOrEqualTo(int expected,
-                                                                     string? because = null)
+    public AndConstraint<EnumerableShould<T>> HaveCountLessOrEqualTo(
+        int expected,
+        string? because = null
+    )
     {
-        Guard.AssertNotNull(input,
-                            because);
-        input!.Count().ShouldBeLessThanOrEqualTo(expected,
-                                                 because);
-
-        return new AndConstraint<EnumerableShould<T>>(this);
-    }
-    
-    public AndConstraint<EnumerableShould<T>> HaveCountGreaterThan(int expected,
-                                                                   string? because = null)
-    {
-        Guard.AssertNotNull(input);
-        
-        input!.Count().ShouldBeGreaterThan(expected);
+        Guard.AssertNotNull(input, because);
+        if (input!.Count() > expected)
+            throw new ShouldAssertException(
+                $"Expected {input!.Format()} to contain at most {expected} entries {Formatter.Because(because)} but only found {input!.Count()}"
+            );
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
-
-    private AndConstraint<EnumerableShould<T>> ContainsNumberOfTimes(Expression<Func<T, bool>> predicate,
-                                                                     int expectedCount,
-                                                                     string? because)
+    public AndConstraint<EnumerableShould<T>> HaveCountGreaterThan(
+        int expected,
+        string? because = null
+    )
     {
-        Guard.AssertNotNull(input,
-                            because);
-        input!.ShouldContain(predicate,
-                             expectedCount,
-                             because);
+        Guard.AssertNotNull(input, because);
+
+        if (input!.Count() <= expected)
+            throw new ShouldAssertException(
+                $"Expected {input!.Format()} to contain more than {expected} entries {Formatter.Because(because)} but only found {input!.Count()}"
+        );
+
+
+        return new AndConstraint<EnumerableShould<T>>(this);
+    }
+
+    private AndConstraint<EnumerableShould<T>> ContainsNumberOfTimes(
+        Expression<Func<T, bool>> predicate,
+        int expectedCount,
+        string? because
+    )
+    {
+        Guard.AssertNotNull(input, because);
+        input!.ShouldContain(predicate, expectedCount, because);
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 }

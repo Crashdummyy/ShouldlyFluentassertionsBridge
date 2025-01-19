@@ -10,15 +10,15 @@ public static class Formatter
     {
         if (target == null)
             return "<null>";
-        
+
         var formatBuilder = new StringBuilder();
         var type = typeof(T);
         formatBuilder.AppendLine($"--- {type.Name} ---");
         var propertyInfos = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
         var padLength = propertyInfos.Max(x => x.Name.Length);
-        foreach (var propertyInfo in propertyInfos) 
+        foreach (var propertyInfo in propertyInfos)
             formatBuilder.AppendLine($"{propertyInfo.Name.PadRight(padLength, ' ')}: {propertyInfo.GetValue(target)}");
-        
+
         formatBuilder.AppendLine("----------------------");
         return formatBuilder.ToString();
     }
@@ -27,10 +27,10 @@ public static class Formatter
         var list = target as IList<T?> ?? target.ToList();
         if (list.Count <= 1)
             return Format(list);
-        
+
         var formatBuilder = new StringBuilder();
         var type = typeof(T);
-        
+
         formatBuilder.AppendLine($"--- {type.Name} ---");
         formatBuilder.AppendLine("[");
         var map = GetMap<T>();
@@ -45,10 +45,10 @@ public static class Formatter
             }
             else
             {
-                foreach (var pair in map) 
+                foreach (var pair in map)
                     formatBuilder.AppendLine($"    {pair.Key.PadRight(padLength, ' ')}: {pair.Value(element)}");
             }
-            
+
             formatBuilder.AppendLine();
             index++;
         }
@@ -56,7 +56,14 @@ public static class Formatter
         formatBuilder.AppendLine("----------------------");
         return formatBuilder.ToString();
     }
-    
+
+    public static string Because(string? because)
+    {
+        return string.IsNullOrWhiteSpace(because)
+            ? string.Empty
+            : $"because {because}";
+    }
+
     private static Dictionary<string, Func<T, object?>> GetMap<T>()
     {
         var type = typeof(T);
@@ -69,7 +76,7 @@ public static class Formatter
             var propertyExpression = Expression.Convert(Expression.Property(parameter,
                                                                             property),
                                                         typeof(object));
-            
+
             map.Add(property.Name,
                     Expression.Lambda<Func<T, object?>>(propertyExpression, parameter).Compile());
         }
