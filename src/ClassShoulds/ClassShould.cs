@@ -3,26 +3,45 @@ using ShouldlyFluentassertionsBridge.Constraints;
 
 namespace ShouldlyFluentassertionsBridge.ClassShoulds;
 
-public class ClassShould<T>(T? input)
-    where T : class
+public class ClassShould(object? input)
 {
-    public AndConstraint<ClassShould<T>> Be(T? expected,
-                                            string? because = null)
+    public AndConstraint<ClassShould> Be(object? expected,
+                                         string? because = null)
     {
         input.ShouldBe(expected,
                        because);
-        return new AndConstraint<ClassShould<T>>(this);
+        return new AndConstraint<ClassShould>(this);
     }
 
-    public AndConstraint<ClassShould<T>> BeOfType<TExpected>()
+    public AndConstraint<ClassShould> NotBe(object? expected,
+                                            string? because = null)
     {
-        input.ShouldBeOfType<TExpected>();
-        return new AndConstraint<ClassShould<T>>(this);
+        input.ShouldNotBe(expected,
+                          because);
+        return new AndConstraint<ClassShould>(this);
     }
 
-    public AndConstraint<ClassShould<T>> NotBeNull(string? because = null)
+    public AndConstraint<ClassShould> BeOfType<TExpected>(string? because = null)
+    {
+        input.ShouldBeOfType<TExpected>(because);
+        return new AndConstraint<ClassShould>(this);
+    }
+
+    public AndConstraint<ClassShould> NotBeOfType<TExpected>(string? because = null)
+    {
+        input.ShouldNotBeOfType<TExpected>(because);
+        return new AndConstraint<ClassShould>(this);
+    }
+
+    public AndConstraint<ClassShould> BeNull(string? because = null)
+    {
+        input.ShouldBeNull(because);
+        return new AndConstraint<ClassShould>(this);
+    }
+
+    public AndConstraint<ClassShould> NotBeNull(string? because = null)
     {
         input.ShouldNotBeNull(because);
-        return new AndConstraint<ClassShould<T>>(this);
+        return new AndConstraint<ClassShould>(this);
     }
 }
