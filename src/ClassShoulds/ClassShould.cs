@@ -9,7 +9,7 @@ public class ClassShould(object? input)
                                          string? because = null)
     {
         input.ShouldBe(expected,
-                       because);
+                       customMessage: because);
         return new AndConstraint<ClassShould>(this);
     }
 
@@ -17,7 +17,16 @@ public class ClassShould(object? input)
                                             string? because = null)
     {
         input.ShouldNotBe(expected,
-                          because);
+                          customMessage: because);
+        return new AndConstraint<ClassShould>(this);
+    }
+    
+    public AndConstraint<ClassShould> BeEquivalentTo(object? expected,
+                                                     string? because = null)
+    {
+        Guard.AssertNotNull(input, because);
+        input.ShouldBeEquivalentTo(expected,
+                                   customMessage: because);
         return new AndConstraint<ClassShould>(this);
     }
 
@@ -29,7 +38,7 @@ public class ClassShould(object? input)
 
     public AndConstraint<ClassShould> NotBeOfType<TExpected>(string? because = null)
     {
-        input.ShouldNotBeOfType<TExpected>(because);
+        input.ShouldNotBeOfType<TExpected>(customMessage: because);
         return new AndConstraint<ClassShould>(this);
     }
 

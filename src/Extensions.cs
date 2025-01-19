@@ -14,6 +14,9 @@ public static class FluentAssertionBridge
 
     [Pure]
     public static EnumerableShould<T?> Should<T>(this IEnumerable<T>? input) => new(input);
+    
+    [Pure]
+    public static HttpResponseMessageShould Should(this HttpResponseMessage? input) => new(input);
 }
 
 public static class StructFluentAssertionBridge

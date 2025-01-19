@@ -8,10 +8,23 @@ public class StringShould(string? input)
 #pragma warning restore CS9107 // Parameter is captured into the state of the enclosing type and its value is also passed to the base constructor. The value might be captured by the base class as well.
 {
     public AndConstraint<StringShould> Be(string? expected,
+                                          StringCompareShould stringCompareShould,
                                           string? because = null)
     {
-        input.ShouldBe(expected,
-                       because);
+        input.ShouldBe(expected, customMessage: because, options: stringCompareShould);
+        return new AndConstraint<StringShould>(this);
+    }
+    public AndConstraint<StringShould> Be(string? expected,
+                                          string? because = null)
+    {
+        input.ShouldBe(expected, customMessage: because);
+        return new AndConstraint<StringShould>(this);
+    }
+    public AndConstraint<StringShould> Be(string? expected,
+                                          IEqualityComparer<string> comparer,
+                                          string? because = null)
+    {
+        input.ShouldBe(expected, comparer, customMessage: because);
         return new AndConstraint<StringShould>(this);
     }
 
@@ -19,7 +32,7 @@ public class StringShould(string? input)
                                                       string? because = null)
     {
         input.ShouldBeEquivalentTo(expected,
-                                   because);
+                                   customMessage: because);
         return new AndConstraint<StringShould>(this);
     }
 
@@ -31,8 +44,8 @@ public class StringShould(string? input)
                             because);
 
         input!.ShouldContain(expected,
-                             caseSensitivity,
-                             because);
+                             caseSensitivity: caseSensitivity,
+                             customMessage: because);
         return new AndConstraint<StringShould>(this);
     }
 

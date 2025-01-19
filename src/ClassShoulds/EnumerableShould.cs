@@ -121,6 +121,34 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
                              customMessage: because);
         return new AndConstraint<EnumerableShould<T>>(this);
     }
+
+    public AndConstraint<EnumerableShould<T>> Contain(IEnumerable<T> expected,
+                                                      string? because = null)
+    {
+        Guard.AssertNotNull(input,
+                            because);
+        
+        var expectedList = expected as IList<T> ?? expected!.ToList()!;
+        var inputList = input as IList<T> ?? input?.ToList()!;
+        var missingEntries = new List<T>();
+        foreach (var element in expectedList)
+        {
+            try
+            {
+                inputList.ShouldContain(element);
+                return new AndConstraint<EnumerableShould<T>>(this);
+            }
+            catch (ShouldAssertException)
+            {
+                missingEntries.Add(element);
+            }
+        }
+
+        throw new ShouldAssertException($"Expected {inputList.Format()} to contain {missingEntries.Format()} but they are missing");
+    }
+
+    public AndConstraint<EnumerableShould<T>> Contain(params T[] expected) => Contain(expected,
+                                                                                      null);
     
     public AndConstraint<EnumerableShould<T>> NotContain(T expected,
                                                          string? because = null)
@@ -133,14 +161,23 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
 
     public AndConstraint<EnumerableShould<T>> Contain(Expression<Func<T, bool>> elementPredicate,
                                                       string? because = null,
-                                                      int numberOfTimes = 1)
+                                                      int? numberOfTimes = null)
     {
         Guard.AssertNotNull(input,
                             because);
 
-        input!.ShouldContain(elementPredicate,
-                             numberOfTimes,
-                             because);
+        if (numberOfTimes == null)
+        {
+            input!.ShouldContain(elementPredicate, 
+                                 customMessage: because);
+        }
+        else
+        {
+            input!.ShouldContain(elementPredicate,
+                                 expectedCount: numberOfTimes.Value,
+                                 customMessage: because);    
+        }
+        
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
@@ -167,8 +204,8 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
         {
             try
             {
-                element.Should().ShouldBeEquivalentTo(expected,
-                                                      because);
+                element.ShouldBeEquivalentTo(expected,
+                                             customMessage: because);
 
                 return new AndConstraint<EnumerableShould<T>>(this);
             }
