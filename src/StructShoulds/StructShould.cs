@@ -13,4 +13,12 @@ public class StructShould<T>(T input)
                        because);
         return new AndConstraint<StructShould<T>>(this);
     }
+
+    public AndConstraint<StructShould<T>> NotBe(T expected,
+                                                string? because = null)
+    {
+        input.ShouldNotBe(expected,
+                          because);
+        return new AndConstraint<StructShould<T>>(this);
+    }
 }
