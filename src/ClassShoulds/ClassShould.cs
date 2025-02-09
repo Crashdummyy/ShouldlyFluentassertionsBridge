@@ -20,7 +20,7 @@ public class ClassShould(object? input)
                           customMessage: because);
         return new AndConstraint<ClassShould>(this);
     }
-    
+
     public AndConstraint<ClassShould> BeEquivalentTo(object? expected,
                                                      string? because = null)
     {
@@ -32,7 +32,7 @@ public class ClassShould(object? input)
 
     public AndConstraint<ClassShould> BeOfType<TExpected>(string? because = null)
     {
-        input.ShouldBeOfType<TExpected>(because);
+        input.ShouldBeOfType<TExpected>(customMessage: because);
         return new AndConstraint<ClassShould>(this);
     }
 
@@ -44,13 +44,13 @@ public class ClassShould(object? input)
 
     public AndConstraint<ClassShould> BeNull(string? because = null)
     {
-        input.ShouldBeNull(because);
+        input.ShouldBeNull(customMessage: because);
         return new AndConstraint<ClassShould>(this);
     }
 
     public AndConstraint<ClassShould> NotBeNull(string? because = null)
     {
-        input.ShouldNotBeNull(because);
+        input.ShouldNotBeNull(customMessage: because);
         return new AndConstraint<ClassShould>(this);
     }
 }

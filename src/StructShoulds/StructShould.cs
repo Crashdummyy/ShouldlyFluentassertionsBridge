@@ -10,7 +10,7 @@ public class StructShould<T>(T? input)
                                              string? because = null)
     {
         input.ShouldBe(expected,
-                       because);
+                       customMessage: because);
         return new AndConstraint<StructShould<T>>(this);
     }
 
@@ -18,7 +18,7 @@ public class StructShould<T>(T? input)
                                                 string? because = null)
     {
         input.ShouldNotBe(expected,
-                          because);
+                          customMessage: because);
         return new AndConstraint<StructShould<T>>(this);
     }
 

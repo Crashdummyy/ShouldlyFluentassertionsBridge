@@ -6,28 +6,18 @@ public class BoolShould(bool? input) : StructShould<bool>(input ?? false)
 {
     public void BeFalse(string? because = null)
     {
-        if (input == null)
-        {
-            throw new ShouldAssertException(new ExpectedShouldlyMessage(input,
-                                                                        because).ToString());
-        }
-
+        Guard.AssertNotNull(input, because);
         Be(false,
            because);
     }
 
     public void BeTrue(string? because = null)
     {
-        if (input == null)
-        {
-            throw new ShouldAssertException(new ExpectedShouldlyMessage(input,
-                                                                        because).ToString());
-        }
-
+        Guard.AssertNotNull(input, because);
         Be(true,
            because);
     }
 
-    public void BeNull(string? because = null) => input.ShouldBeNull(because);
-    public void NotBeNull(string? because = null) => input.ShouldNotBeNull(because);
+    public void BeNull(string? because = null) => input.ShouldBeNull(customMessage: because);
+    public void NotBeNull(string? because = null) => input.ShouldNotBeNull(customMessage: because);
 }

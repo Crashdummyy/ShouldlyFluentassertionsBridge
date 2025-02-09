@@ -39,10 +39,15 @@ public class StringShould(string? input)
     public AndConstraint<StringShould> NotBeEquivalentTo(string? expected,
                                                          string? because = null)
     {
-        if (input == null && expected == null)
+        if (input == null && expected != null)
             return new AndConstraint<StringShould>(this);
 
-        return input.CompareTo(expected) != 0
+
+        if (input != null && expected == null)
+            return new AndConstraint<StringShould>(this);
+
+
+        return input?.CompareTo(expected) != 0
             ? new AndConstraint<StringShould>(this)
             : throw new ShouldAssertException($"Expected input not to be {expected} {Formatter.Because(because)}");
 
@@ -144,24 +149,24 @@ public class StringShould(string? input)
 
     public AndConstraint<StringShould> BeNullOrEmpty(string? because = null)
     {
-        input.ShouldBeNullOrEmpty(because);
+        input.ShouldBeNullOrEmpty(customMessage: because);
         return new AndConstraint<StringShould>(this);
     }
 
     public AndConstraint<StringShould> NotBeNullOrEmpty(string? because = null)
     {
-        input.ShouldNotBeNullOrEmpty(because);
+        input.ShouldNotBeNullOrEmpty(customMessage: because);
         return new AndConstraint<StringShould>(this);
     }
     public AndConstraint<StringShould> BeNullOrWhitespace(string? because = null)
     {
-        input.ShouldBeNullOrWhiteSpace(because);
+        input.ShouldBeNullOrWhiteSpace(customMessage: because);
         return new AndConstraint<StringShould>(this);
     }
 
     public AndConstraint<StringShould> NotBeNullOrWhitespace(string? because = null)
     {
-        input.ShouldNotBeNullOrWhiteSpace(because);
+        input.ShouldNotBeNullOrWhiteSpace(customMessage: because);
         return new AndConstraint<StringShould>(this);
     }
 }

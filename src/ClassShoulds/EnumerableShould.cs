@@ -14,21 +14,21 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
 
         Guard.AssertNotNull(input, because);
 
-        input.ShouldBe(expected, because);
+        input.ShouldBe(expected, customMessage: because);
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
     public AndConstraint<EnumerableShould<T>> BeNull(string? because = null)
     {
-        input.ShouldBeNull(because);
+        input.ShouldBeNull(customMessage: because);
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
     public AndConstraint<EnumerableShould<T>> NotBeNull(string? because = null)
     {
-        input.ShouldNotBeNull(because);
+        input.ShouldNotBeNull(customMessage: because);
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
@@ -36,7 +36,7 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
     public AndConstraint<EnumerableShould<T>> BeEmpty(string? because = null)
     {
         Guard.AssertNotNull(input, because);
-        input.ShouldBeEmpty(because);
+        input.ShouldBeEmpty(customMessage: because);
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
@@ -44,7 +44,7 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
     public AndConstraint<EnumerableShould<T>> NotBeEmpty(string? because = null)
     {
         Guard.AssertNotNull(input, because);
-        input.ShouldNotBeEmpty(because);
+        input.ShouldNotBeEmpty(customMessage: because);
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
@@ -54,14 +54,14 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
         if (input == null)
             return new AndConstraint<EnumerableShould<T>>(this);
 
-        input.ShouldBeEmpty(because);
+        input.ShouldBeEmpty(customMessage: because);
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
     public AndConstraint<EnumerableShould<T>> NotBeNullOrEmpty(string? because = null)
     {
         Guard.AssertNotNull(input, because);
-        input.ShouldNotBeEmpty(because);
+        input.ShouldNotBeEmpty(customMessage: because);
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
@@ -179,7 +179,7 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
     {
         Guard.AssertNotNull(input, because);
 
-        input!.ShouldNotContain(elementPredicate, because);
+        input!.ShouldNotContain(elementPredicate, customMessage: because);
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
@@ -206,7 +206,7 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
         }
 
         throw new ShouldAssertException(
-            $"Expected {input.Format()} to contain {expected.Format()} but it was nowhere to be found"
+            $"Expected {input.Format()} to contain {expected.Format()} {Formatter.Because(because)} but it was nowhere to be found"
         );
     }
 
@@ -237,12 +237,12 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
             var expectedEntry = expectedList[index];
             try
             {
-                actual.ShouldBeEquivalentTo(expectedEntry, because);
+                actual.ShouldBeEquivalentTo(expectedEntry, customMessage: because);
             }
             catch (ShouldAssertException e)
             {
                 throw new ShouldAssertException(
-                    $"Expected {expectedEntry.Format()} at ({index}) but found {actual.Format()}",
+                    $"Expected {expectedEntry.Format()} at ({index}) {Formatter.Because(because)} but found {actual.Format()}",
                     e
                 );
             }
@@ -329,7 +329,7 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
     )
     {
         Guard.AssertNotNull(input, because);
-        input!.ShouldContain(predicate, expectedCount, because);
+        input!.ShouldContain(predicate, expectedCount, customMessage: because);
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 }

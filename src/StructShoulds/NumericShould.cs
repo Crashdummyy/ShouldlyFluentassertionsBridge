@@ -42,13 +42,13 @@ public class NumericShould<T>(T? input)
 
     public AndConstraint<NumericShould<T>> Be(T expected, string? because = null)
     {
-        input.ShouldBe(expected, because);
+        input.ShouldBe(expected, customMessage: because);
         return new AndConstraint<NumericShould<T>>(this);
     }
 
     public AndConstraint<NumericShould<T>> NotBe(T expected, string? because = null)
     {
-        input.ShouldNotBe(expected, because);
+        input.ShouldNotBe(expected, customMessage: because);
         return new AndConstraint<NumericShould<T>>(this);
     }
 
@@ -81,7 +81,7 @@ public class NumericShould<T>(T? input)
     }
 
     public AndConstraint<NumericShould<T>> NotBeOneOf(params T?[] validValues) =>
-        BeOneOf(validValues, null);
+        NotBeOneOf(validValues, null);
 
     public AndConstraint<NumericShould<T>> NotBeOneOf(
         IEnumerable<T?> validValues,
