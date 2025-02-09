@@ -14,7 +14,10 @@ public static class FluentAssertionBridge
 
     [Pure]
     public static EnumerableShould<T?> Should<T>(this IEnumerable<T>? input) => new(input);
-    
+
+    [Pure]
+    public static DictionaryShould<TKey, TValue> Should<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>>? input) => new(input);
+
     [Pure]
     public static HttpResponseMessageShould Should(this HttpResponseMessage? input) => new(input);
 }
@@ -28,47 +31,47 @@ public static class StructFluentAssertionBridge
     public static BoolShould Should(this bool? input) => new(input);
     [Pure]
     public static BoolShould Should(this bool input) => new(input);
-    
+
     [Pure]
     public static NumericShould<ulong> Should(this ulong input) => new(input);
     [Pure]
     public static NumericShould<ulong> Should(this ulong? input) => new(input);
-    
+
     [Pure]
     public static NumericShould<long> Should(this long input) => new(input);
     [Pure]
     public static NumericShould<long> Should(this long? input) => new(input);
-    
+
     [Pure]
     public static NumericShould<uint> Should(this uint input) => new(input);
     [Pure]
     public static NumericShould<uint> Should(this uint? input) => new(input);
-    
+
     [Pure]
     public static NumericShould<int> Should(this int input) => new(input);
     [Pure]
     public static NumericShould<int> Should(this int? input) => new(input);
-    
+
     [Pure]
     public static NumericShould<ushort> Should(this ushort input) => new(input);
     [Pure]
     public static NumericShould<ushort> Should(this ushort? input) => new(input);
-    
+
     [Pure]
     public static NumericShould<short> Should(this short input) => new(input);
     [Pure]
     public static NumericShould<short> Should(this short? input) => new(input);
-    
+
     [Pure]
     public static NumericShould<float> Should(this float input) => new(input);
     [Pure]
     public static NumericShould<float> Should(this float? input) => new(input);
-    
+
     [Pure]
     public static NumericShould<double> Should(this double input) => new(input);
     [Pure]
     public static NumericShould<double> Should(this double? input) => new(input);
-    
+
     [Pure]
     public static NumericShould<decimal> Should(this decimal input) => new(input);
     [Pure]

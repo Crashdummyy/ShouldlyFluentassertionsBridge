@@ -263,7 +263,6 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
-
     public AndConstraint<EnumerableShould<T>> NotHaveCount(int expected, string? because = null)
     {
         Guard.AssertNotNull(input, because);
@@ -275,7 +274,6 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }
-
 
     public AndConstraint<EnumerableShould<T>> HaveCountGreaterThanOrEqualTo(
         int expected,
