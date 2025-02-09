@@ -52,7 +52,7 @@ public class NumericShould<T>(T? input)
         return new AndConstraint<NumericShould<T>>(this);
     }
 
-    public AndConstraint<NumericShould<T>> BeNull(string? because)
+    public AndConstraint<NumericShould<T>> BeNull(string? because = null)
     {
         if (input == null)
             return new AndConstraint<NumericShould<T>>(this);
@@ -62,7 +62,7 @@ public class NumericShould<T>(T? input)
         );
     }
 
-    public AndConstraint<NumericShould<T>> NotBeNull(string? because)
+    public AndConstraint<NumericShould<T>> NotBeNull(string? because = null)
     {
         Guard.AssertNotNull(input, because);
         return new AndConstraint<NumericShould<T>>(this);
