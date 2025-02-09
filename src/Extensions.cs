@@ -26,32 +26,51 @@ public static class StructFluentAssertionBridge
 
     [Pure]
     public static BoolShould Should(this bool? input) => new(input);
-
     [Pure]
     public static BoolShould Should(this bool input) => new(input);
     
     [Pure]
     public static NumericShould<ulong> Should(this ulong input) => new(input);
+    [Pure]
+    public static NumericShould<ulong> Should(this ulong? input) => new(input);
     
     [Pure]
     public static NumericShould<long> Should(this long input) => new(input);
+    [Pure]
+    public static NumericShould<long> Should(this long? input) => new(input);
     
     [Pure]
     public static NumericShould<uint> Should(this uint input) => new(input);
+    [Pure]
+    public static NumericShould<uint> Should(this uint? input) => new(input);
     
     [Pure]
     public static NumericShould<int> Should(this int input) => new(input);
+    [Pure]
+    public static NumericShould<int> Should(this int? input) => new(input);
     
     [Pure]
     public static NumericShould<ushort> Should(this ushort input) => new(input);
+    [Pure]
+    public static NumericShould<ushort> Should(this ushort? input) => new(input);
     
     [Pure]
     public static NumericShould<short> Should(this short input) => new(input);
     [Pure]
+    public static NumericShould<short> Should(this short? input) => new(input);
+    
+    [Pure]
     public static NumericShould<float> Should(this float input) => new(input);
+    [Pure]
+    public static NumericShould<float> Should(this float? input) => new(input);
     
     [Pure]
     public static NumericShould<double> Should(this double input) => new(input);
     [Pure]
+    public static NumericShould<double> Should(this double? input) => new(input);
+    
+    [Pure]
     public static NumericShould<decimal> Should(this decimal input) => new(input);
+    [Pure]
+    public static NumericShould<decimal> Should(this decimal? input) => new(input);
 }

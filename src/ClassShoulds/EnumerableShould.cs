@@ -65,18 +65,6 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
-    public AndConstraint<EnumerableShould<T>> HaveCount(int expected, string? because = null)
-    {
-        Guard.AssertNotNull(input, because);
-
-        if (input!.Count() != expected)
-            throw new ShouldAssertException(
-                $"Expected {input!.Format()} to contain {expected} entries {Formatter.Because(because)} but only found {input!.Count()}"
-            );
-
-        return new AndConstraint<EnumerableShould<T>>(this);
-    }
-
     public AndConstraint<EnumerableShould<T>> AllSatisfy(
         Action<T?> expected,
         string because = "",
@@ -113,19 +101,6 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
                 string.Format(because, becauseArgs)
             ).ToString()
         );
-    }
-
-    public AndConstraint<EnumerableShould<T>> HaveCountGreaterOrEqualTo(
-        int expected,
-        string? because = null
-    )
-    {
-        Guard.AssertNotNull(input, because);
-        if (input!.Count() < expected)
-            throw new ShouldAssertException(
-                $"Expected {input!.Format()} to contain at least {expected} {Formatter.Because(because)} entries but only found {input!.Count()}"
-            );
-        return new AndConstraint<EnumerableShould<T>>(this);
     }
 
     public AndConstraint<EnumerableShould<T>> Contain(T expected, string? because = null)
@@ -276,6 +251,50 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
+    public AndConstraint<EnumerableShould<T>> HaveCount(int expected, string? because = null)
+    {
+        Guard.AssertNotNull(input, because);
+
+        if (input!.Count() != expected)
+            throw new ShouldAssertException(
+                $"Expected {input!.Format()} to contain {expected} entries {Formatter.Because(because)} but only found {input!.Count()}"
+            );
+
+        return new AndConstraint<EnumerableShould<T>>(this);
+    }
+
+
+    public AndConstraint<EnumerableShould<T>> NotHaveCount(int expected, string? because = null)
+    {
+        Guard.AssertNotNull(input, because);
+
+        if (input!.Count() == expected)
+            throw new ShouldAssertException(
+                $"Expected {input!.Format()} to not contain {expected} entries {Formatter.Because(because)}"
+            );
+
+        return new AndConstraint<EnumerableShould<T>>(this);
+    }
+
+
+    public AndConstraint<EnumerableShould<T>> HaveCountGreaterThanOrEqualTo(
+        int expected,
+        string? because = null
+    ) => HaveCountGreaterOrEqualTo(expected, because);
+
+    public AndConstraint<EnumerableShould<T>> HaveCountGreaterOrEqualTo(
+        int expected,
+        string? because = null
+    )
+    {
+        Guard.AssertNotNull(input, because);
+        if (input!.Count() < expected)
+            throw new ShouldAssertException(
+                $"Expected {input!.Format()} to contain at least {expected} {Formatter.Because(because)} entries but only found {input!.Count()}"
+            );
+        return new AndConstraint<EnumerableShould<T>>(this);
+    }
+
     public AndConstraint<EnumerableShould<T>> HaveCountLessOrEqualTo(
         int expected,
         string? because = null
@@ -300,8 +319,7 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
         if (input!.Count() <= expected)
             throw new ShouldAssertException(
                 $"Expected {input!.Format()} to contain more than {expected} entries {Formatter.Because(because)} but only found {input!.Count()}"
-        );
-
+            );
 
         return new AndConstraint<EnumerableShould<T>>(this);
     }

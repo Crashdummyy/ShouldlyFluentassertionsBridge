@@ -3,8 +3,8 @@ using ShouldlyFluentassertionsBridge.Constraints;
 
 namespace ShouldlyFluentassertionsBridge.StructShoulds;
 
-public class StructShould<T>(T input)
-    where T : struct
+public class StructShould<T>(T? input)
+    where T: struct
 {
     public AndConstraint<StructShould<T>> Be(T expected,
                                              string? because = null)

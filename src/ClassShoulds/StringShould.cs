@@ -114,12 +114,28 @@ public class StringShould(string? input)
         return new AndConstraint<StringShould>(this);
     }
 
+
+    public AndConstraint<StringShould> BeEmpty(string? because = null)
+    {
+        Guard.AssertNotNull(input, because);
+        input.ShouldBeEmpty(customMessage: because);
+        return new AndConstraint<StringShould>(this);
+    }
+
+
+    public AndConstraint<StringShould> NotBeEmpty(string? because = null)
+    {
+        Guard.AssertNotNull(input, because);
+        input.ShouldNotBeEmpty(customMessage: because);
+        return new AndConstraint<StringShould>(this);
+    }
+
     public AndConstraint<StringShould> BeNullOrEmpty(string? because = null)
     {
         input.ShouldBeNullOrEmpty(because);
         return new AndConstraint<StringShould>(this);
     }
-    
+
     public AndConstraint<StringShould> NotBeNullOrEmpty(string? because = null)
     {
         input.ShouldNotBeNullOrEmpty(because);
@@ -130,7 +146,7 @@ public class StringShould(string? input)
         input.ShouldBeNullOrWhiteSpace(because);
         return new AndConstraint<StringShould>(this);
     }
-    
+
     public AndConstraint<StringShould> NotBeNullOrWhitespace(string? because = null)
     {
         input.ShouldNotBeNullOrWhiteSpace(because);
