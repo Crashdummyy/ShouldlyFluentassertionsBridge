@@ -49,6 +49,22 @@ public class EnumerableShould<T>(IEnumerable<T?>? input)
         return new AndConstraint<EnumerableShould<T>>(this);
     }
 
+    public AndConstraint<EnumerableShould<T>> BeNullOrEmpty(string? because = null)
+    {
+        if (input == null)
+            return new AndConstraint<EnumerableShould<T>>(this);
+
+        input.ShouldBeEmpty(because);
+        return new AndConstraint<EnumerableShould<T>>(this);
+    }
+
+    public AndConstraint<EnumerableShould<T>> NotBeNullOrEmpty(string? because = null)
+    {
+        Guard.AssertNotNull(input, because);
+        input.ShouldNotBeEmpty(because);
+        return new AndConstraint<EnumerableShould<T>>(this);
+    }
+
     public AndConstraint<EnumerableShould<T>> HaveCount(int expected, string? because = null)
     {
         Guard.AssertNotNull(input, because);
