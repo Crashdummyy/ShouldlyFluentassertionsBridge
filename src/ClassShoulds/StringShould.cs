@@ -36,6 +36,18 @@ public class StringShould(string? input)
         return new AndConstraint<StringShould>(this);
     }
 
+    public AndConstraint<StringShould> NotBeEquivalentTo(string? expected,
+                                                         string? because = null)
+    {
+        if (input == null && expected == null)
+            return new AndConstraint<StringShould>(this);
+
+        return input.CompareTo(expected) != 0
+            ? new AndConstraint<StringShould>(this)
+            : throw new ShouldAssertException($"Expected input not to be {expected} {Formatter.Because(because)}");
+
+    }
+
     public AndConstraint<StringShould> Contain(string expected,
                                                string? because = null,
                                                Case caseSensitivity = Case.Insensitive)
